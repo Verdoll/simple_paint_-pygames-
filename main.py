@@ -1,7 +1,9 @@
 #рисовалка
 import pygame
 import random
-
+pygame.init()
+font = pygame.font.SysFont('Colibri', 80)
+version_font = pygame.font.SysFont('Times New Roman', 30)
 #colors
 red = (255, 0, 0)
 green = (0, 255, 0)
@@ -11,7 +13,8 @@ black = (0, 0, 0)
 pink = (255, 102, 102)
 colors = [red, green, blue, white, black, pink]
 
-
+selected_color = font.render('>', True, white)
+version = version_font.render('paint v.0.2', True, white)
 current_color = (255,255,255)
 screen = pygame.display.set_mode((800,600))
 grid = [[(0,0,0) for _ in range(8)] for _ in range(8)]
@@ -59,6 +62,16 @@ while running:
         pygame.draw.rect(screen, colors[k], pygame.Rect(800-60, k*60,60,60))
         pygame.draw.rect(screen, white, pygame.Rect(800-60, k*60, 60,60), 2)
 
+    #selected color
+    #61
+    selected_seg_y = -5
+    for color in colors:
+        if current_color == color:
+            break
+        selected_seg_y += 61
+    screen.blit(selected_color, (700, selected_seg_y))
+    #version
+    screen.blit(version, (10, 565))
     #clock etc.
     pygame.display.flip()
     clock = pygame.time.Clock()
