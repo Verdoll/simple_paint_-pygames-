@@ -1,9 +1,8 @@
-#рисовалка
 import pygame
-import random
 pygame.init()
 font = pygame.font.SysFont('Colibri', 80)
 version_font = pygame.font.SysFont('Times New Roman', 30)
+
 #colors
 red = (255, 0, 0)
 green = (0, 255, 0)
@@ -13,15 +12,17 @@ black = (0, 0, 0)
 pink = (255, 102, 102)
 colors = [red, green, blue, white, black, pink]
 
+cell_size = 60
+screen_size = (800, 600)
 selected_color = font.render('>', True, white)
-version = version_font.render('paint v.0.2', True, white)
+version = version_font.render('paint v.0.3', True, white)
 current_color = (255,255,255)
-screen = pygame.display.set_mode((800,600))
+screen = pygame.display.set_mode(screen_size)
 grid = [[(0,0,0) for _ in range(8)] for _ in range(8)]
-#если по 75 возьмем 1 квадрат, то:
-#600 пикселей слева занято, 200 справа под худ
-#короче 60 взяли и хватит
+
+clock = pygame.time.Clock()
 running  = True
+
 while running:
 
     #events
@@ -31,8 +32,8 @@ while running:
 
         #events updates
         mouse_x, mouse_y = pygame.mouse.get_pos()
-        row = mouse_x // 60
-        col = mouse_y // 60
+        row = mouse_x // cell_size
+        col = mouse_y // cell_size
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # левая кнопка
@@ -54,13 +55,13 @@ while running:
         m = 0
         for el in row:
 
-            pygame.draw.rect(screen, el, pygame.Rect(k*60, m*60, 60,60))
+            pygame.draw.rect(screen, el, pygame.Rect(k*cell_size, m*cell_size, cell_size,cell_size))
             m+=1
         k+=1
     #squares with color
     for k in range(6):
-        pygame.draw.rect(screen, colors[k], pygame.Rect(800-60, k*60,60,60))
-        pygame.draw.rect(screen, white, pygame.Rect(800-60, k*60, 60,60), 2)
+        pygame.draw.rect(screen, colors[k], pygame.Rect(800-cell_size, k*cell_size,cell_size,cell_size))
+        pygame.draw.rect(screen, white, pygame.Rect(800-cell_size, k*cell_size, cell_size,cell_size), 2)
 
     #selected color
     #61
@@ -74,5 +75,4 @@ while running:
     screen.blit(version, (10, 565))
     #clock etc.
     pygame.display.flip()
-    clock = pygame.time.Clock()
-    clock.tick(60)
+    clock.tick(cell_size)
